@@ -16,6 +16,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-add_executable (cppEMMTest main.cpp)
+cmake_minimum_required (VERSION 3.3.1)
 
-target_link_libraries(cppEMMTest LINK_PUBLIC cppEMM)
+project (cppEMM)
+
+add_subdirectory (src)
+add_subdirectory (tests)
