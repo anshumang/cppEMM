@@ -78,13 +78,17 @@ class tNN
     return c;
   }
 
-  //environment<int> tnn_d; 
-  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), numeric lambda=l_wrap());
-
   static character getMeasure(tNN& tnn)
   {
     return tnn.m_measure;
   }
+
+public:
+  //environment<int> tnn_d; 
+  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), numeric lambda=l_wrap());
+
+  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), numeric lambda=l_wrap());
+
 };
 
 class SimpleMC
@@ -100,26 +104,58 @@ class SimpleMC
     return u;
   }
 
-  SimpleMC(integer unused=u_wrap());
+  static integer & t_wrap()
+  {
+    static integer t(10);
+    return t;
+  }
+
+  static matrix & c_wrap()
+  {
+    static matrix c(10, integer(10,0));
+    return c;
+  }
+
+  SimpleMC();
 };
 
 class TRACDS
 {
-  numeric lambda;
-  numeric lambda_factor;
+  numeric m_lambda;
+  numeric m_lambda_factor;
+
+  static numeric & l_wrap()
+  {
+    static numeric l{0};
+    return l;
+  }
+
+  static numeric & lf_wrap()
+  {
+    static numeric lf{1};
+    return lf;
+  }
+
+public:
+  TRACDS();
+
+  TRACDS(numeric lambda=l_wrap());
 };
 
 //class EMMInherit : tNN<int>, TRACDS
-class EMMInherit : tNN, TRACDS
+/*class EMMInherit : tNN, TRACDS
 {
 
-};
+};*/
 
-class EMMAggregate 
+//class EMMAggregate 
+class EMM 
 {
  //tNN<int> m_tNN;
- tNN m_tNN;
- TRACDS m_TRACDS; 
+ tNN* m_tNN;
+ TRACDS* m_TRACDS; 
+ EMM();
+ EMM(numeric threshold, character measure, numeric lambda);
 };
 
 #endif

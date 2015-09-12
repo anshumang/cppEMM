@@ -28,3 +28,35 @@ tNN::tNN(numeric threshold, character measure, logical centroids, numeric lambda
    std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
 }
 
+tNN::tNN(numeric threshold, character measure, numeric lambda)
+ : m_threshold(threshold),
+   m_measure(measure),
+   m_lambda(lambda)
+{
+   std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
+}
+
+SimpleMC::SimpleMC()
+{
+ m_unused=u_wrap(); 
+ m_top=t_wrap(); 
+ m_counts=c_wrap();
+}
+
+TRACDS::TRACDS()
+{
+  m_lambda=l_wrap();
+  m_lambda_factor=lf_wrap();
+}
+
+TRACDS::TRACDS(numeric lambda)
+:m_lambda(lambda)
+{
+  m_lambda_factor=lf_wrap();
+}
+
+EMM::EMM(numeric threshold, character measure, numeric lambda) /*variadic constructors - HOWTO?*/
+: m_tNN(new tNN(threshold, measure, lambda)),
+  m_TRACDS(new TRACDS(lambda))
+{
+}
