@@ -24,5 +24,7 @@ tNN::tNN(numeric threshold, character measure, logical centroids, numeric lambda
    m_measure(measure),
    m_centroids(centroids),
    m_lambda(lambda)
-{}
+{
+   std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
+}
 

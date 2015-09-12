@@ -24,6 +24,8 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <algorithm>
+#include <cmath>
 
 typedef std::vector<double> numeric;
 typedef std::vector<int> integer;
@@ -91,6 +93,14 @@ class SimpleMC
   integer m_top;
   matrix m_counts;
   numeric m_initial_counts;
+
+  static integer & u_wrap()
+  {
+    static integer u(10);
+    return u;
+  }
+
+  SimpleMC(integer unused=u_wrap());
 };
 
 class TRACDS
