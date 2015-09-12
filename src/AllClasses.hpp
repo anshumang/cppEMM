@@ -23,10 +23,14 @@
 
 #include <vector>
 #include <set>
+#include <string>
 
-typedef std::vector<int> numeric;
-typedef std::vector<char> character; //or use std::string??
+typedef std::vector<double> numeric;
+typedef std::vector<int> integer;
+typedef std::string character;
+//typedef std::vector<char> character; //or use std::vector<char>??
 typedef std::vector<bool> logical;
+typedef std::vector<std::vector<int>> matrix; //C++11 : >> ok
 
 template<typename T>
 class environment
@@ -47,13 +51,46 @@ class tNN
   numeric m_threshold;
   numeric m_lambda;
   numeric m_lambda_factor;
+
+  static numeric & t_wrap()
+  {
+    static numeric t{0.2};
+    return t;
+  }
+
+  static numeric & l_wrap()
+  {
+    static numeric l{0};
+    return l;
+  }
+
+  static character & m_wrap()
+  {
+    static character m("euclidean");
+    return m;
+  }
+
+  static logical & c_wrap(character lhs, character rhs)
+  {
+    static logical c{lhs==rhs};
+    return c;
+  }
+
   //environment<int> tnn_d; 
-  tNN(numeric threshold, character measure, logical centroids, numeric lambda);
+  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), numeric lambda=l_wrap());
+
+  static character getMeasure(tNN& tnn)
+  {
+    return tnn.m_measure;
+  }
 };
 
 class SimpleMC
 {
-
+  integer m_unused;
+  integer m_top;
+  matrix m_counts;
+  numeric m_initial_counts;
 };
 
 class TRACDS
