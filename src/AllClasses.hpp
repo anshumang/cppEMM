@@ -22,32 +22,54 @@
 #define _ALLCLASSES_HPP_
 
 #include <vector>
-typedef std::vector<int> numeric;
+#include <set>
 
-class StreamClustering{
+typedef std::vector<int> numeric;
+typedef std::vector<char> character; //or use std::string??
+typedef std::vector<bool> logical;
+
+template<typename T>
+class environment
+{
+  typedef std::set<T> storage;
+};
+
+class StreamClustering
+{
 
 };
 
-class tNN{
+//template<typename T>
+class tNN
+{
+  character measure;
+  logical centroids;
   numeric threshold;
   numeric lambda;
   numeric lambda_factor;
+  //environment<int> tnn_d; 
 };
 
-class SimpleMC{
+class SimpleMC
+{
 
 };
 
-class TRACDS{
+class TRACDS
+{
   numeric lambda;
   numeric lambda_factor;
 };
 
-class EMMInherit : tNN, TRACDS{
+//class EMMInherit : tNN<int>, TRACDS
+class EMMInherit : tNN, TRACDS
+{
 
 };
 
-class EMMAggregate {
+class EMMAggregate 
+{
+ //tNN<int> m_tNN;
  tNN m_tNN;
  TRACDS m_TRACDS; 
 };
