@@ -41,6 +41,7 @@ SimpleMC::SimpleMC(int size)
  m_unused=u_wrap(size); 
  m_top=t_wrap(size); 
  m_counts=c_wrap(size);
+ m_initial_counts=ic_wrap(size);
 }
 
 TRACDS::TRACDS()

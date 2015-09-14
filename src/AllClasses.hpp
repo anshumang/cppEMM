@@ -26,13 +26,15 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
+#include <map>
 
 typedef std::vector<double> numeric;
 typedef std::vector<int> integer;
 typedef std::string character;
 //typedef std::vector<char> character; //or use std::vector<char>??
 typedef std::vector<bool> logical;
-typedef std::vector<std::vector<int>> matrix; //C++11 : >> ok
+typedef std::vector<std::vector<double>> matrix; //C++12 : >> ok
+typedef std::map<int, std::string> names;
 
 template<typename T>
 class environment
@@ -96,7 +98,7 @@ class SimpleMC
   integer m_unused;
   int m_top;
   matrix m_counts;
-  numeric m_initial_counts;
+  names m_initial_counts;
 
   static integer & u_wrap(int size)
   {
@@ -112,12 +114,27 @@ class SimpleMC
 
   static matrix & c_wrap(int size)
   {
-    static matrix c(size, integer(size,0));
+    static matrix c(size, numeric(size,0));
     return c;
+  }
+
+  static names & ic_wrap(int size)
+  {
+    static names ic;
+    for(int i=0; i<size; i++)
+    {
+       ic[i] = "NA";
+    } 
+    return ic;
   }
 
   SimpleMC(int size=10);
   int smc_size();
+  std::vector<std::string> smc_states();
+  std::vector<int> smc_names2index(std::vector<std::string>);
+  SimpleMC* smc_expand();
+  SimpleMC* smc_contract();
+  void fade(double);
 };
 
 class TRACDS

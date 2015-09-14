@@ -16,7 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-add_library(cppEMM AllClasses.cpp)
+add_library(cppEMM AllClasses.cpp SimpleMC.cpp)
 
 target_include_directories (cppEMM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
