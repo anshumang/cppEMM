@@ -36,11 +36,11 @@ tNN::tNN(numeric threshold, character measure, numeric lambda)
    std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
 }
 
-SimpleMC::SimpleMC()
+SimpleMC::SimpleMC(int size)
 {
- m_unused=u_wrap(); 
- m_top=t_wrap(); 
- m_counts=c_wrap();
+ m_unused=u_wrap(size); 
+ m_top=t_wrap(size); 
+ m_counts=c_wrap(size);
 }
 
 TRACDS::TRACDS()

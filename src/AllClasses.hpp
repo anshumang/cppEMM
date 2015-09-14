@@ -94,29 +94,30 @@ public:
 class SimpleMC
 {
   integer m_unused;
-  integer m_top;
+  int m_top;
   matrix m_counts;
   numeric m_initial_counts;
 
-  static integer & u_wrap()
+  static integer & u_wrap(int size)
   {
-    static integer u(10);
+    static integer u(size);
     return u;
   }
 
-  static integer & t_wrap()
+  static int & t_wrap(int size)
   {
-    static integer t(10);
+    static int t=size;
     return t;
   }
 
-  static matrix & c_wrap()
+  static matrix & c_wrap(int size)
   {
-    static matrix c(10, integer(10,0));
+    static matrix c(size, integer(size,0));
     return c;
   }
 
-  SimpleMC();
+  SimpleMC(int size=10);
+  int smc_size();
 };
 
 class TRACDS
