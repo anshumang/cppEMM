@@ -48,6 +48,8 @@ TRACDS::TRACDS()
 {
   m_lambda=l_wrap();
   m_lambda_factor=lf_wrap();
+  m_mm=new SimpleMC();
+  m_current_state = "NA";
 }
 
 TRACDS::TRACDS(numeric lambda)

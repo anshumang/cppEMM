@@ -129,6 +129,7 @@ class SimpleMC
     return ic;
   }
 
+public:
   SimpleMC(int size=10);
   int smc_size();
   std::vector<std::string> smc_states();
@@ -143,6 +144,8 @@ class TRACDS
 {
   numeric m_lambda;
   numeric m_lambda_factor;
+  SimpleMC* m_mm;
+  character m_current_state;
 
   static numeric & l_wrap()
   {
@@ -158,8 +161,10 @@ class TRACDS
 
 public:
   TRACDS();
-
   TRACDS(numeric lambda=l_wrap());
+  int nstates();
+  std::vector<std::string> states();
+  std::string current_state();
 };
 
 //class EMMInherit : tNN<int>, TRACDS
