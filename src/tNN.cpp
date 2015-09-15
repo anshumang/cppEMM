@@ -32,3 +32,8 @@ character tNN::last_clustering(bool remove)
    }
    return m_last; 
 }
+
+void tNN::set_last(std::string s)
+{
+   m_last = s;
+}

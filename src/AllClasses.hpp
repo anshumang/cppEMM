@@ -97,6 +97,7 @@ public:
   tNN(numeric threshold=t_wrap(), character measure=m_wrap(), numeric lambda=l_wrap());
   matrix cluster_centers();
   character last_clustering(bool remove=false);
+  void set_last(std::string);
 };
 
 class SimpleMC
@@ -187,8 +188,8 @@ class EMM
 public:
  EMM();
  EMM(numeric threshold, character measure, numeric lambda);
- void build();
- void cluster();
+ void build(matrix);
+ void cluster(matrix);
  void update();
  EMM* predict();
  matrix transition_matrix();

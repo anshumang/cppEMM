@@ -19,7 +19,8 @@
 
 #include "AllClasses.hpp"
 
-void EMM::cluster()
+void EMM::cluster(matrix newdata)
 {
-
+    std::string s(newdata.size(), ' ');
+    m_tNN->set_last(s);
 }
