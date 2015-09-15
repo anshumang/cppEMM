@@ -19,3 +19,12 @@
 
 #include "AllClasses.hpp"
 
+matrix tNN::cluster_centers()
+{
+
+}
+
+character tNN::last_clustering()
+{
+
+}

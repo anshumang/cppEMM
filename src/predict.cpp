@@ -19,3 +19,8 @@
 
 #include "AllClasses.hpp"
 
+EMM* EMM::predict()
+{
+   /*TO BE ADDED*/
+   return this;
+}

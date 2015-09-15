@@ -56,6 +56,10 @@ class tNN
   numeric m_threshold;
   numeric m_lambda;
   numeric m_lambda_factor;
+  matrix m_centers;
+  numeric m_counts;
+  numeric m_var_thresholds;
+  character m_last;
 
   static numeric & t_wrap()
   {
@@ -91,7 +95,8 @@ public:
   tNN(numeric threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), numeric lambda=l_wrap());
 
   tNN(numeric threshold=t_wrap(), character measure=m_wrap(), numeric lambda=l_wrap());
-
+  matrix cluster_centers();
+  character last_clustering();
 };
 
 class SimpleMC
@@ -179,8 +184,14 @@ class EMM
  //tNN<int> m_tNN;
  tNN* m_tNN;
  TRACDS* m_TRACDS; 
+public:
  EMM();
  EMM(numeric threshold, character measure, numeric lambda);
+ void build();
+ void cluster();
+ void update();
+ EMM* predict();
+ matrix transition_matrix();
 };
 
 #endif

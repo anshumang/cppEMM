@@ -19,3 +19,9 @@
 
 #include "AllClasses.hpp"
 
+matrix EMM::transition_matrix()
+{
+  matrix m;
+  /*TO BE ADDED*/
+  return m;
+}

@@ -19,4 +19,7 @@
 
 #include "AllClasses.hpp"
 
+void EMM::update()
+{
 
+}
