@@ -56,7 +56,7 @@ SimpleMC* SimpleMC::smc_contract()
   return this;
 }
 
-void SimpleMC::fade(double f)
+void SimpleMC::smc_fade(double f)
 {
   for(int i=0; i<m_counts.size(); i++)
   {
@@ -66,4 +66,46 @@ void SimpleMC::fade(double f)
       m_counts[i][j] = f * m_counts[i][j];
     }
   }
+}
+
+named_matrix SimpleMC::smc_countMatrix()
+{
+   std::vector<std::pair<int,bool>> used(m_initial_counts.size());
+   int idx=0;
+   for(auto ic : m_initial_counts)
+   {
+      if(ic.second == "NA")
+      {
+        used.push_back(std::pair<int,bool>(idx,false));
+      }
+      else
+      {
+        used.push_back(std::pair<int,bool>(idx,true));
+      }
+      idx++;
+   }
+   named_matrix nm;
+   if(used.size()<1)
+   {
+      return nm;
+   }
+   int r=0, c=0;
+   nm.resize(used.size());
+   auto ic = m_initial_counts.begin();
+   for(auto rr: m_counts)
+   {
+      nm[r].resize(used.size());
+      auto u = used.begin();
+      for(auto cc: rr)
+      {
+         if(u[c].second) /*true*/
+         {
+           nm[r][c] = std::pair<double, std::string>(rr[c], ic[u[c].first].second); 
+           c++;
+         }
+      }
+      r++;
+      c=0;
+   }
+   return nm;
 }

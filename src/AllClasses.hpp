@@ -26,7 +26,7 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
-#include <map>
+#include <utility>
 
 typedef std::vector<double> numeric;
 typedef std::vector<int> integer;
@@ -34,7 +34,8 @@ typedef std::string character;
 //typedef std::vector<char> character; //or use std::vector<char>??
 typedef std::vector<bool> logical;
 typedef std::vector<std::vector<double>> matrix; //C++12 : >> ok
-typedef std::map<int, std::string> names;
+typedef std::vector<std::pair<int, std::string>> names;
+typedef std::vector<std::vector<std::pair<double, std::string>>> named_matrix;
 
 template<typename T>
 class environment
@@ -123,7 +124,7 @@ class SimpleMC
     static names ic;
     for(int i=0; i<size; i++)
     {
-       ic[i] = "NA";
+       ic.push_back(std::pair<double, std::string>(i, "NA"));
     } 
     return ic;
   }
@@ -134,7 +135,8 @@ class SimpleMC
   std::vector<int> smc_names2index(std::vector<std::string>);
   SimpleMC* smc_expand();
   SimpleMC* smc_contract();
-  void fade(double);
+  void smc_fade(double);
+  named_matrix smc_countMatrix();
 };
 
 class TRACDS
