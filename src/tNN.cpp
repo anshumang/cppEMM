@@ -21,10 +21,14 @@
 
 matrix tNN::cluster_centers()
 {
-
+   return m_centers;
 }
 
-character tNN::last_clustering()
+character tNN::last_clustering(bool remove)
 {
-
+   if(remove)
+   {
+     m_last = "NA";
+   }
+   return m_last; 
 }

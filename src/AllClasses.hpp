@@ -96,7 +96,7 @@ public:
 
   tNN(numeric threshold=t_wrap(), character measure=m_wrap(), numeric lambda=l_wrap());
   matrix cluster_centers();
-  character last_clustering();
+  character last_clustering(bool remove=false);
 };
 
 class SimpleMC
