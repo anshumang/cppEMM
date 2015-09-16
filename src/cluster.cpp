@@ -108,7 +108,7 @@ void EMM::cluster(named_matrix newdata)
                row++;
                col=0;
            }
-           std::string sel;
+           std::string sel("NA");
            if(matches.size()==0)
            {
                sel = "NA";
@@ -136,6 +136,39 @@ void EMM::cluster(named_matrix newdata)
                    }
                }
            }/*end else matches.size() > 1*/
+                    /*## NA means no match -> create a new node
+                    if(is.na(sel)) {
+                        ## New node
+                        ## get new node name (highest node
+                        ## number is last entry in count)
+                        sel <- as.character(
+                                max(suppressWarnings(
+                                                as.integer(names(tnn_d$counts))
+                                                ), na.rm=TRUE) + 1L)
+
+                        rownames(nd) <- sel
+                        tnn_d$centers <- rbind(tnn_d$centers, nd)
+                        tnn_d$counts[sel] <- 1
+                        ## initialize threshold
+                        tnn_d$var_thresholds[sel] <- x@threshold}*/
+             if(sel == "NA")
+             {
+                int max = 0;
+                for(auto c: m_tNN->m_counts)
+                {
+                    max = std::stoi(c.second) > max ? std::stoi(c.second) : max;
+                }
+                sel = std::to_string(max);
+                int idx = 0;
+                for(auto n : nd)
+                {
+                    nd[idx] = std::pair<double, std::string>(n.first, sel);
+                    m_tNN->m_centers.push_back(nd[idx]);
+                    idx++;
+                }
+                m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
+                m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
+             }
          }
       }
 }
