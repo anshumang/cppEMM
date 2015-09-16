@@ -35,7 +35,9 @@ typedef std::string character;
 typedef std::vector<bool> logical;
 typedef std::vector<std::vector<double>> matrix; //C++12 : >> ok
 typedef std::vector<std::pair<int, std::string>> names;
-typedef std::vector<std::vector<std::pair<double, std::string>>> named_matrix;
+typedef std::vector<std::pair<double, std::string>> named_vector;
+typedef std::vector<named_vector> named_matrix;
+typedef std::vector<character> stringvec;
 
 template<typename T>
 class environment
@@ -54,12 +56,12 @@ class tNN
   character m_measure;
   logical m_centroids;
   numeric m_threshold;
-  numeric m_lambda;
-  numeric m_lambda_factor;
+  /*numeric*/double m_lambda;
+  /*numeric*/double m_lambda_factor;
   matrix m_centers;
   numeric m_counts;
   numeric m_var_thresholds;
-  character m_last;
+  stringvec m_last;
 
   static numeric & t_wrap()
   {
@@ -67,9 +69,9 @@ class tNN
     return t;
   }
 
-  static numeric & l_wrap()
+  static double & l_wrap()
   {
-    static numeric l{0};
+    static double l=0;
     return l;
   }
 
@@ -92,12 +94,13 @@ class tNN
 
 public:
   //environment<int> tnn_d; 
-  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), numeric lambda=l_wrap());
+  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), /*numeric*/double lambda=l_wrap());
 
-  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), numeric lambda=l_wrap());
+  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), /*numeric*/double lambda=l_wrap());
   matrix cluster_centers();
-  character last_clustering(bool remove=false);
-  void set_last(std::string);
+  stringvec last_clustering(bool remove=false);
+  void set_last(stringvec);
+  void update_last(int, std::string);
 };
 
 class SimpleMC
@@ -148,26 +151,26 @@ public:
 
 class TRACDS
 {
-  numeric m_lambda;
-  numeric m_lambda_factor;
+  /*numeric*/double m_lambda;
+  /*numeric*/double m_lambda_factor;
   SimpleMC* m_mm;
   character m_current_state;
 
-  static numeric & l_wrap()
+  static /*numeric*/double & l_wrap()
   {
-    static numeric l{0};
+    static /*numeric*/double l=0;
     return l;
   }
 
-  static numeric & lf_wrap()
+  static /*numeric*/double & lf_wrap()
   {
-    static numeric lf{1};
+    static /*numeric*/double lf=1;
     return lf;
   }
 
 public:
   TRACDS();
-  TRACDS(numeric lambda=l_wrap());
+  TRACDS(/*numeric*/double lambda=l_wrap());
   int nstates();
   std::vector<std::string> states();
   std::string current_state();
@@ -185,11 +188,13 @@ class EMM
  //tNN<int> m_tNN;
  tNN* m_tNN;
  TRACDS* m_TRACDS; 
+ double m_lambda;
+ double m_lambda_factor;
 public:
  EMM();
- EMM(numeric threshold, character measure, numeric lambda);
- void build(matrix);
- void cluster(matrix);
+ EMM(numeric threshold, character measure, /*numeric*/double lambda);
+ void build(named_matrix);
+ void cluster(named_matrix);
  void update();
  EMM* predict();
  matrix transition_matrix();

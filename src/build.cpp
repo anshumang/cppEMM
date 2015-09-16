@@ -19,7 +19,7 @@
 
 #include "AllClasses.hpp"
 
-void EMM::build(matrix newdata)
+void EMM::build(named_matrix newdata)
 {
   this->cluster(newdata);
   this->update();

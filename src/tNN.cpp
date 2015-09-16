@@ -24,16 +24,22 @@ matrix tNN::cluster_centers()
    return m_centers;
 }
 
-character tNN::last_clustering(bool remove)
+stringvec tNN::last_clustering(bool remove)
 {
    if(remove)
    {
-     m_last = "NA";
+     m_last.resize(1); 
+     m_last.push_back("NA");
    }
    return m_last; 
 }
 
-void tNN::set_last(std::string s)
+void tNN::set_last(stringvec sv)
 {
-   m_last = s;
+   m_last = sv;
+}
+
+void tNN::update_last(int i, std::string s)
+{
+   m_last[i] = s;
 }

@@ -19,8 +19,18 @@
 
 #include "AllClasses.hpp"
 
-void EMM::cluster(matrix newdata)
+void EMM::cluster(named_matrix newdata)
 {
-    std::string s(newdata.size(), ' ');
-    m_tNN->set_last(s);
+    stringvec sv(newdata.size(), " ");
+    m_tNN->set_last(sv);
+    
+    for(int i=0; i<newdata.size(); i++)
+    {
+        named_vector nd = newdata[i]; //nd <- newdata[i,, drop = FALSE]
+        if(std::all_of(nd.begin(), nd.end(), [](std::pair<double, std::string> p){ return p.second == "NA"; }))//if(all(is.na(nd))) {
+        {
+          m_tNN->update_last(i, "NA"); //tnn_d$last[i] <- as.character(NA)
+          continue; //next }
+        }
+    }
 }

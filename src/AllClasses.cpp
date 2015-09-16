@@ -19,21 +19,23 @@
 
 #include "AllClasses.hpp"
 
-tNN::tNN(numeric threshold, character measure, logical centroids, numeric lambda)
+tNN::tNN(numeric threshold, character measure, logical centroids, /*numeric*/double lambda)
  : m_threshold(threshold),
    m_measure(measure),
    m_centroids(centroids),
    m_lambda(lambda)
 {
-   std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
+   //std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
+   m_lambda_factor = std::pow(2, (-m_lambda));
 }
 
-tNN::tNN(numeric threshold, character measure, numeric lambda)
+tNN::tNN(numeric threshold, character measure, /*numeric*/double lambda)
  : m_threshold(threshold),
    m_measure(measure),
    m_lambda(lambda)
 {
-   std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
+   //std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
+   m_lambda_factor = std::pow(2, (-m_lambda));
 }
 
 SimpleMC::SimpleMC(int size)
@@ -52,14 +54,16 @@ TRACDS::TRACDS()
   m_current_state = "NA";
 }
 
-TRACDS::TRACDS(numeric lambda)
+TRACDS::TRACDS(/*numeric*/double lambda)
 :m_lambda(lambda)
 {
   m_lambda_factor=lf_wrap();
 }
 
-EMM::EMM(numeric threshold, character measure, numeric lambda) /*variadic constructors - HOWTO?*/
+EMM::EMM(numeric threshold, character measure, /*numeric*/double lambda) /*variadic constructors - HOWTO?*/
 : m_tNN(new tNN(threshold, measure, lambda)),
-  m_TRACDS(new TRACDS(lambda))
+  m_TRACDS(new TRACDS(lambda)),
+  m_lambda(lambda)
 {
+   m_lambda_factor = std::pow(2, (-m_lambda));
 }
