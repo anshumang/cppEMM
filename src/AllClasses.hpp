@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <cmath>
 #include <utility>
+#include <cfloat>
 
 typedef std::vector<double> numeric;
 typedef std::vector<int> integer;
@@ -53,19 +54,20 @@ class StreamClustering
 //template<typename T>
 class tNN
 {
+public:
   character m_measure;
   logical m_centroids;
-  numeric m_threshold;
+  /*numeric*/double m_threshold;
   /*numeric*/double m_lambda;
   /*numeric*/double m_lambda_factor;
-  matrix m_centers;
-  numeric m_counts;
-  numeric m_var_thresholds;
+  /*named_matrix*/named_vector m_centers;
+  named_vector m_counts;
+  named_vector m_var_thresholds;
   stringvec m_last;
 
-  static numeric & t_wrap()
+  static /*numeric*/double & t_wrap()
   {
-    static numeric t{0.2};
+    static /*numeric*/double t=0.2/*{0.2}*/;
     return t;
   }
 
@@ -92,15 +94,15 @@ class tNN
     return tnn.m_measure;
   }
 
-public:
   //environment<int> tnn_d; 
-  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), /*numeric*/double lambda=l_wrap());
+  tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), /*numeric*/double lambda=l_wrap());
 
-  tNN(numeric threshold=t_wrap(), character measure=m_wrap(), /*numeric*/double lambda=l_wrap());
-  matrix cluster_centers();
+  tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), /*numeric*/double lambda=l_wrap());
+  /*named_matrix*/named_vector cluster_centers();
   stringvec last_clustering(bool remove=false);
   void set_last(stringvec);
   void update_last(int, std::string);
+  int nclusters();
 };
 
 class SimpleMC
@@ -190,9 +192,10 @@ class EMM
  TRACDS* m_TRACDS; 
  double m_lambda;
  double m_lambda_factor;
+ double m_threshold;
 public:
  EMM();
- EMM(numeric threshold, character measure, /*numeric*/double lambda);
+ EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambda);
  void build(named_matrix);
  void cluster(named_matrix);
  void update();

@@ -19,9 +19,14 @@
 
 #include "AllClasses.hpp"
 
-matrix tNN::cluster_centers()
+/*named_matrix*/named_vector tNN::cluster_centers()
 {
    return m_centers;
+}
+
+int tNN::nclusters()
+{
+   return m_centers.size();
 }
 
 stringvec tNN::last_clustering(bool remove)

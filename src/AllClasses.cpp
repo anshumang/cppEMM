@@ -19,7 +19,7 @@
 
 #include "AllClasses.hpp"
 
-tNN::tNN(numeric threshold, character measure, logical centroids, /*numeric*/double lambda)
+tNN::tNN(/*numeric*/double threshold, character measure, logical centroids, /*numeric*/double lambda)
  : m_threshold(threshold),
    m_measure(measure),
    m_centroids(centroids),
@@ -29,7 +29,7 @@ tNN::tNN(numeric threshold, character measure, logical centroids, /*numeric*/dou
    m_lambda_factor = std::pow(2, (-m_lambda));
 }
 
-tNN::tNN(numeric threshold, character measure, /*numeric*/double lambda)
+tNN::tNN(/*numeric*/double threshold, character measure, /*numeric*/double lambda)
  : m_threshold(threshold),
    m_measure(measure),
    m_lambda(lambda)
@@ -60,9 +60,10 @@ TRACDS::TRACDS(/*numeric*/double lambda)
   m_lambda_factor=lf_wrap();
 }
 
-EMM::EMM(numeric threshold, character measure, /*numeric*/double lambda) /*variadic constructors - HOWTO?*/
+EMM::EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambda) /*variadic constructors - HOWTO?*/
 : m_tNN(new tNN(threshold, measure, lambda)),
   m_TRACDS(new TRACDS(lambda)),
+  m_threshold(threshold),
   m_lambda(lambda)
 {
    m_lambda_factor = std::pow(2, (-m_lambda));
