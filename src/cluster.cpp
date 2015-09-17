@@ -90,7 +90,7 @@ void EMM::cluster(named_matrix newdata)
                     dist += std::pow((v.first - w[idxdim].first),2);
                     idxdim++;
                   }
-                  inside[idxnumc] = std::pair<double, std::string>(std::sqrt(dist), w[0].second);
+                  inside[idxnumc] = std::pair<double, std::string>(std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first, w[0].second);
                   idxnumc++;
                   idxdim=0;
               }
@@ -198,14 +198,115 @@ void EMM::cluster(named_matrix newdata)
 
                         if(m_tNN->m_centroids)
                         {
-                             named_vector nnas;
+                             //try moving center
+                             std::vector<int> nnas;
+                             //also remember NAs
+                             std::vector<int> nas;
+                             int idx=0;
                              for(auto v : nd)
                              {
                                 if(v.second != "NA")
                                 {
-                                   nnas.push_back(v);
+                                   nnas.push_back(idx);
                                 }
-                                
+                                else
+                                {
+                                   nas.push_back(idx);
+                                }
+                                idx++;
+                             }
+                             named_vector new_center;
+                             for(auto m : m_tNN->m_centers)
+                             {
+                                if(m[0].second == sel)
+                                {
+                                   std::copy(m.begin(), m.end(), new_center.begin());
+                                   break;
+                                }
+                             }
+                             double counts = 0;
+                             for(auto v: m_tNN->m_counts)
+                             {
+                                if(v.second == sel)
+                                {
+                                   counts = v.first;
+                                   break;
+                                }
+                             }
+                             for(auto v : nnas)
+                             {
+                                new_center[v] = std::pair<double, std::string>((new_center[v].first * counts + nd[v].first) / (counts+1), new_center[v].second);    
+                             }
+
+                             //replace NAs
+                             for(auto v : nas)
+                             {
+                                new_center[v] = nd[v]; 
+                             }
+
+                             //check if move is legal
+                             if(matches.size() < 0)
+                             {
+                                int idx=0;
+                                for(auto m : m_tNN->m_centers)
+                                {
+                                    if(m[0].second == new_center[0].second)
+                                    {
+                                        m_tNN->m_centers[idx] = new_center;
+                                        break;
+                                    }
+                                    idx++;
+                                }
+                             }
+                             else
+                             {
+                                 //violation <- dist(rbind(new_center),
+                                 //         tnn_d$centers[matches,],
+                                 //         method=x@distFun) - tnn_d$var_thresholds[matches]
+                                 named_matrix matched_centers;
+                                 for(auto c : m_tNN->m_centers)
+                                 {
+                                      auto other_s = c[0].second;
+                                      if(std::any_of(matches.begin(), matches.end(), [other_s](std::string s){return other_s == s;}))
+                                      {
+                                         matched_centers.push_back(c);
+                                      }
+                                 }
+                                 idxdim=0; idxnumc=0;
+				 named_vector violation(matched_centers.size());
+				 for(auto w : matched_centers)
+				 {
+					 double dist = 0;
+					 for(auto v : new_center)
+					 {
+						 dist += std::pow((v.first - w[idxdim].first),2);
+						 idxdim++;
+					 }
+					 inside[idxnumc] = std::pair<double, std::string>(std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first, w[0].second);
+					 idxnumc++;
+					 idxdim=0;
+				 }
+                                 //if(sum(violation<0)<2) {
+                                 //    tnn_d$centers[sel,] <- new_center 
+                                 double sum = 0;
+                                 for(auto v : violation)
+                                 {
+                                     sum += v.first;
+                                 }
+                                 if(sum < 2)
+                                 {
+					 int idx=0;
+					 for(auto m : m_tNN->m_centers)
+					 {
+						 if(m[0].second == new_center[0].second)
+						 {
+							 m_tNN->m_centers[idx] = new_center;
+							 break;
+						 }
+						 idx++;
+					 }
+                                     
+                                 } 
                              }
                         }
              }
