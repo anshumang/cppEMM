@@ -169,6 +169,48 @@ void EMM::cluster(named_matrix newdata)
                 m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
                 m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
              }
+             else
+             {
+                        /*## assign observation to existing node
+
+                        ## update center (if we use centroids)
+                        if(x@centroids) {
+
+                            ## try moving first
+                            nnas <- !is.na(nd)
+                            new_center <- tnn_d$centers[sel,]
+                            new_center[nnas] <- (new_center[nnas] * tnn_d$counts[sel] +  nd[nnas]) / (tnn_d$counts[sel]+1)
+
+                            ## replace NAs with the new data
+                            nas <- is.na(new_center)
+                            if(any(nas)) new_center[nas] <- nd[nas]
+
+                            ## check if move is legal (does not enter
+                            ## another cluster's threshold)
+                            if(length(matches)<2) {
+                                tnn_d$centers[sel,] <- new_center
+                            }else{
+                                violation <- dist(rbind(new_center),
+                                        tnn_d$centers[matches,],
+                                        method=x@distFun) - tnn_d$var_thresholds[matches]
+
+
+                                if(sum(violation<0)<2) {
+                                    tnn_d$centers[sel,] <- new_center
+                                }
+
+                            }
+
+                        }
+
+                        ## update counts
+                        tnn_d$counts[sel] <- tnn_d$counts[sel] + 1*/
+
+                        if(m_tNN->m_centroids)
+                        {
+
+                        }
+             }
          }
       }
 }

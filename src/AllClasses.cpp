@@ -19,7 +19,7 @@
 
 #include "AllClasses.hpp"
 
-tNN::tNN(/*numeric*/double threshold, character measure, logical centroids, /*numeric*/double lambda)
+tNN::tNN(/*numeric*/double threshold, character measure, /*logical*/bool centroids, /*numeric*/double lambda)
  : m_threshold(threshold),
    m_measure(measure),
    m_centroids(centroids),

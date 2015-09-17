@@ -56,7 +56,7 @@ class tNN
 {
 public:
   character m_measure;
-  logical m_centroids;
+  /*logical*/bool m_centroids;
   /*numeric*/double m_threshold;
   /*numeric*/double m_lambda;
   /*numeric*/double m_lambda_factor;
@@ -83,9 +83,9 @@ public:
     return m;
   }
 
-  static logical & c_wrap(character lhs, character rhs)
+  static /*logical*/bool & c_wrap(character lhs, character rhs)
   {
-    static logical c{lhs==rhs};
+    static /*logical*/bool c{lhs==rhs};
     return c;
   }
 
@@ -95,7 +95,7 @@ public:
   }
 
   //environment<int> tnn_d; 
-  tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), logical centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), /*numeric*/double lambda=l_wrap());
+  tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), /*logical*/bool centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), /*numeric*/double lambda=l_wrap());
 
   tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), /*numeric*/double lambda=l_wrap());
   /*named_matrix*/named_vector cluster_centers();
