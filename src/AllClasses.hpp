@@ -60,7 +60,7 @@ public:
   /*numeric*/double m_threshold;
   /*numeric*/double m_lambda;
   /*numeric*/double m_lambda_factor;
-  /*named_matrix*/named_vector m_centers;
+  named_matrix m_centers; /*centers can be N-dimensional*/
   named_vector m_counts;
   named_vector m_var_thresholds;
   stringvec m_last;
@@ -98,7 +98,7 @@ public:
   tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), /*logical*/bool centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), /*numeric*/double lambda=l_wrap());
 
   tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), /*numeric*/double lambda=l_wrap());
-  /*named_matrix*/named_vector cluster_centers();
+  named_matrix cluster_centers();
   stringvec last_clustering(bool remove=false);
   void set_last(stringvec);
   void update_last(int, std::string);

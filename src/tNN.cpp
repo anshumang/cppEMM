@@ -19,7 +19,7 @@
 
 #include "AllClasses.hpp"
 
-/*named_matrix*/named_vector tNN::cluster_centers()
+named_matrix tNN::cluster_centers()
 {
    return m_centers;
 }

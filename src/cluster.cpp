@@ -62,7 +62,7 @@ void EMM::cluster(named_matrix newdata)
               nd[idx] = std::pair<double, std::string>(nd[idx].first, sel);
               idx++;
            }
-           m_tNN->m_centers = nd;
+           m_tNN->m_centers.push_back(nd);
            m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
            m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
         }
@@ -80,33 +80,27 @@ void EMM::cluster(named_matrix newdata)
            }else if(length(matches)==1) { sel <- matches
            }else sel <- matches[which.min(inside[matches])]*/
          /*supports euclidean only*/
-           named_matrix inside;
-           int row=0, col=0;
-           for(auto v : nd)
-           {  named_vector r(m_tNN->m_centers.size());
-              inside.push_back(r);
+           named_vector inside(m_tNN->m_centers.size());
+           int idxdim=0, idxnumc=0;
               for(auto w : m_tNN->m_centers)
               {
-                  inside[row][col] = std::pair<double, std::string>(std::fabs(v.first - w.first) - m_tNN->m_var_thresholds[col].first, w.second);
-                  col++;
+                  double dist = 0;
+                  for(auto v : nd)
+                  {
+                    dist += std::pow((v.first - w[idxdim].first),2);
+                    idxdim++;
+                  }
+                  inside[idxnumc] = std::pair<double, std::string>(std::sqrt(dist), w[0].second);
+                  idxnumc++;
+                  idxdim=0;
               }
-              row++;
-              col=0;
-           }
            std::vector<std::string> matches;
-           row=0;col=0;
            for(auto r : inside)
            {
-               for(auto c: r)
-               {
-                  if(c.first<0)
+                  if(r.first<0)
                   {
-                    matches.push_back(c.second);
+                    matches.push_back(r.second);
                   }
-                  col++;
-               }
-               row++;
-               col=0;
            }
            std::string sel("NA");
            if(matches.size()==0)
@@ -122,18 +116,14 @@ void EMM::cluster(named_matrix newdata)
                double min_dist = DBL_MAX;
                for(auto r:inside)
                {
-                   auto row = r;
-                   for(auto c: row)
-                   {
-                       auto other_s = c.second;
+                       auto other_s = r.second;
                        if(std::any_of(matches.begin(), matches.end(), [other_s](std::string s){return other_s==s;}))
                        {
-                           if(c.first < min_dist)
+                           if(r.first < min_dist)
                            {
-                               sel = c.second; 
+                               sel = r.second; 
                            }
                        }
-                   }
                }
            }/*end else matches.size() > 1*/
                     /*## NA means no match -> create a new node
@@ -163,9 +153,9 @@ void EMM::cluster(named_matrix newdata)
                 for(auto n : nd)
                 {
                     nd[idx] = std::pair<double, std::string>(n.first, sel);
-                    m_tNN->m_centers.push_back(nd[idx]);
                     idx++;
                 }
+		m_tNN->m_centers.push_back(nd);
                 m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
                 m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
              }
@@ -208,7 +198,15 @@ void EMM::cluster(named_matrix newdata)
 
                         if(m_tNN->m_centroids)
                         {
-
+                             named_vector nnas;
+                             for(auto v : nd)
+                             {
+                                if(v.second != "NA")
+                                {
+                                   nnas.push_back(v);
+                                }
+                                
+                             }
                         }
              }
          }
