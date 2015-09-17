@@ -34,16 +34,18 @@ tNN::tNN(/*numeric*/double threshold, character measure, /*numeric*/double lambd
    m_measure(measure),
    m_lambda(lambda)
 {
+   std::cout << "tNN CTOR" << std::endl;
    //std::transform(m_lambda.begin(), m_lambda.begin(), m_lambda_factor.begin(), [](double l) {return std::pow(2, (-l));});
    m_lambda_factor = std::pow(2, (-m_lambda));
 }
 
 SimpleMC::SimpleMC(int size)
 {
- m_unused=u_wrap(size); 
- m_top=t_wrap(size); 
- m_counts=c_wrap(size);
- m_initial_counts=ic_wrap(size);
+  std::cout << "SimpleMC CTOR" << std::endl;
+  m_unused=u_wrap(size); 
+  m_top=t_wrap(size); 
+  m_counts=c_wrap(size);
+  m_initial_counts=ic_wrap(size);
 }
 
 TRACDS::TRACDS()
@@ -57,7 +59,10 @@ TRACDS::TRACDS()
 TRACDS::TRACDS(/*numeric*/double lambda)
 :m_lambda(lambda)
 {
+  std::cout << "TRACDS CTOR" << std::endl;
   m_lambda_factor=lf_wrap();
+  m_mm=new SimpleMC();
+  m_current_state = "NA";
 }
 
 EMM::EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambda) /*variadic constructors - HOWTO?*/
@@ -66,5 +71,6 @@ EMM::EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambd
   m_threshold(threshold),
   m_lambda(lambda)
 {
+   std::cout << "EMM CTOR" << std::endl;
    m_lambda_factor = std::pow(2, (-m_lambda));
 }

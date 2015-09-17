@@ -21,6 +21,8 @@
 
 void EMM::cluster(named_matrix newdata)
 {
+    std::cout << "EMM::cluster()" << std::endl;
+#if 0
     stringvec sv(newdata.size(), " ");
     m_tNN->set_last(sv);
     
@@ -312,4 +314,5 @@ void EMM::cluster(named_matrix newdata)
              }
          }
       }
+#endif
 }

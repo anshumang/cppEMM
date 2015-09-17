@@ -18,8 +18,20 @@
 */
 
 #include "../src/AllClasses.hpp"
+#include <iostream>
 
 int main(int)
 {
+  std::cout << "Staring main...." << std::endl;
+  EMM emm(0.1, "euclidean", 0.01);
+  named_matrix train_table;
+  named_vector train_row;
+  train_row.push_back(std::pair<double, std::string>(1, "1"));
+  train_row.push_back(std::pair<double, std::string>(2, "1"));
+  train_table.push_back(train_row);
+  train_row[0] = std::pair<double, std::string>(4, "2");
+  train_row[1] = std::pair<double, std::string>(8, "2");
+  train_table.push_back(train_row);
+  emm.build(train_table);
   return 0;
 }

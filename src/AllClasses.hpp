@@ -28,6 +28,7 @@
 #include <cmath>
 #include <utility>
 #include <cfloat>
+#include <iostream>
 
 typedef std::vector<double> numeric;
 typedef std::vector<int> integer;
