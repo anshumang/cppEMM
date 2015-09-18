@@ -23,9 +23,11 @@ void EMM::cluster(named_matrix newdata)
 {
     std::cout << "EMM::cluster()" << std::endl;
 #if 0
+    //tnn_d$last <- character(nrow(newdata))
     stringvec sv(newdata.size(), " ");
-    m_tNN->set_last(sv);
-    
+    //m_tNN->set_last(sv);
+    m_tNN->m_last = sv;
+
     for(int i=0; i<newdata.size(); i++)
     {
         named_vector nd = newdata[i]; //nd <- newdata[i,, drop = FALSE]

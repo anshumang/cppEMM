@@ -39,7 +39,7 @@ typedef std::vector<std::vector<double>> matrix; //C++12 : >> ok
 typedef std::vector<std::pair<int, std::string>> names;
 typedef std::vector<std::pair<double, std::string>> named_vector;
 typedef std::vector<named_vector> named_matrix;
-typedef std::vector<character> stringvec;
+typedef std::vector<std::string> stringvec;
 
 template<typename T>
 class environment
