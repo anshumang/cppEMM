@@ -22,7 +22,6 @@
 void EMM::cluster(named_matrix newdata)
 {
     std::cout << "EMM::cluster()" << std::endl;
-#if 0
     //tnn_d$last <- character(nrow(newdata))
     stringvec sv(newdata.size(), " ");
     //m_tNN->set_last(sv);
@@ -59,6 +58,7 @@ void EMM::cluster(named_matrix newdata)
         }*/
         if(m_tNN->nclusters()<1)
         {
+           std::cout << "new data " << i << std::endl;
            std::string sel("1");
            int idx=0;
            for(auto nv : nd)
@@ -72,6 +72,8 @@ void EMM::cluster(named_matrix newdata)
         }
         else
         {
+           std::cout << "new data " << i << std::endl;
+
            /*## find a matching state
            #sel <- find_clusters(x, nd, match_cluster="exact")
            ### all with inside<=0 are matches
@@ -83,21 +85,24 @@ void EMM::cluster(named_matrix newdata)
            if(length(matches)==0) { sel <- NA
            }else if(length(matches)==1) { sel <- matches
            }else sel <- matches[which.min(inside[matches])]*/
+
          /*supports euclidean only*/
            named_vector inside(m_tNN->m_centers.size());
            int idxdim=0, idxnumc=0;
-              for(auto w : m_tNN->m_centers)
-              {
-                  double dist = 0;
-                  for(auto v : nd)
-                  {
-                    dist += std::pow((v.first - w[idxdim].first),2);
-                    idxdim++;
-                  }
-                  inside[idxnumc] = std::pair<double, std::string>(std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first, w[0].second);
-                  idxnumc++;
-                  idxdim=0;
-              }
+	   for(auto w : m_tNN->m_centers)
+	   {
+		   double dist = 0;
+		   for(auto v : nd)
+		   {
+			   dist += std::pow((v.first - w[idxdim].first),2);
+                           std::cout << "v.first " << v.first << " w[" << idxdim << "].first " << w[idxdim].first << " dist " << dist << std::endl; 
+			   idxdim++;
+		   }
+		   inside[idxnumc] = std::pair<double, std::string>(std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first, w[0].second);
+                   std::cout << "inside " << idxnumc << " first " << inside[idxnumc].first << " threshold " << m_tNN->m_var_thresholds[idxnumc].first << std::endl;
+		   idxnumc++;
+		   idxdim=0;
+	   }
            std::vector<std::string> matches;
            for(auto r : inside)
            {
@@ -109,11 +114,13 @@ void EMM::cluster(named_matrix newdata)
            std::string sel("NA");
            if(matches.size()==0)
            {
+               std::cout << "# matches " << matches.size() << std::endl;
                sel = "NA";
            }
            else if(matches.size()==1)
            {
                sel = matches[0];
+               std::cout << "# matches " << matches.size() <<  " " << sel << std::endl;
            }
            else
            {
@@ -123,28 +130,31 @@ void EMM::cluster(named_matrix newdata)
                        auto other_s = r.second;
                        if(std::any_of(matches.begin(), matches.end(), [other_s](std::string s){return other_s==s;}))
                        {
+			   std::cout << "# matches " << matches.size() << " r.second " << r.second << " r.first " << r.first << " min_dist " <<  min_dist << std::endl;
                            if(r.first < min_dist)
                            {
                                sel = r.second; 
                            }
                        }
                }
-           }/*end else matches.size() > 1*/
-                    /*## NA means no match -> create a new node
-                    if(is.na(sel)) {
-                        ## New node
-                        ## get new node name (highest node
-                        ## number is last entry in count)
-                        sel <- as.character(
-                                max(suppressWarnings(
-                                                as.integer(names(tnn_d$counts))
-                                                ), na.rm=TRUE) + 1L)
+               std::cout << min_dist << " " << sel << std::endl;
+           }/*if(matches.size() > 1)*/
 
-                        rownames(nd) <- sel
-                        tnn_d$centers <- rbind(tnn_d$centers, nd)
-                        tnn_d$counts[sel] <- 1
-                        ## initialize threshold
-                        tnn_d$var_thresholds[sel] <- x@threshold}*/
+           /*## NA means no match -> create a new node
+           if(is.na(sel)) {
+           ## New node
+           ## get new node name (highest node
+           ## number is last entry in count)
+           sel <- as.character(
+                  max(suppressWarnings(
+                  as.integer(names(tnn_d$counts))
+                  ), na.rm=TRUE) + 1L)
+             rownames(nd) <- sel
+             tnn_d$centers <- rbind(tnn_d$centers, nd)
+             tnn_d$counts[sel] <- 1
+             ## initialize threshold
+             tnn_d$var_thresholds[sel] <- x@threshold}*/
+
              if(sel == "NA")
              {
                 int max = 0;
@@ -152,7 +162,8 @@ void EMM::cluster(named_matrix newdata)
                 {
                     max = std::stoi(c.second) > max ? std::stoi(c.second) : max;
                 }
-                sel = std::to_string(max);
+                sel = std::to_string(max+1);
+                std::cout << i << " " << max << " " << sel << " " << m_tNN->m_counts.size() << std::endl;
                 int idx = 0;
                 for(auto n : nd)
                 {
@@ -202,6 +213,7 @@ void EMM::cluster(named_matrix newdata)
 
                         if(m_tNN->m_centroids)
                         {
+                      #if 1
                              //try moving center
                              std::vector<int> nnas;
                              //also remember NAs
@@ -249,7 +261,7 @@ void EMM::cluster(named_matrix newdata)
                              }
 
                              //check if move is legal
-                             if(matches.size() < 0)
+                             if(matches.size() < 2)
                              {
                                 int idx=0;
                                 for(auto m : m_tNN->m_centers)
@@ -290,8 +302,8 @@ void EMM::cluster(named_matrix newdata)
 					 idxnumc++;
 					 idxdim=0;
 				 }
-                                 //if(sum(violation<0)<2) {
-                                 //    tnn_d$centers[sel,] <- new_center 
+                                 /*if(sum(violation<0)<2) {
+                                     tnn_d$centers[sel,] <- new_center}*/ 
                                  int sum = 0;
                                  for(auto v : violation)
                                  {
@@ -311,10 +323,21 @@ void EMM::cluster(named_matrix newdata)
 					 }
                                      
                                  } 
-                             }
-                        }
-             }
-         }
-      }
-#endif
+                             } /*if(matches.size() >= 2)*/
+                          #endif
+                        } /*if(m_tNN->m_centroids == false)*/
+                        /*tnn_d$counts[sel] <- tnn_d$counts[sel] + 1*/
+			int idx=0;
+			for(auto m : m_tNN->m_counts)
+			{
+				if(m.second == sel)
+				{
+					m_tNN->m_counts[idx] = std::pair<double, std::string>(m.first + 1, sel);
+					break;
+				}
+				idx++;
+			}
+                } /*if(sel != "NA")*/
+           } /*if(m_tNN->nclusters()>=1)*/
+      } /*for(int i=0; i<newdata.size(); i++)*/
 }
