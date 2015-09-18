@@ -290,10 +290,10 @@ void EMM::cluster(named_matrix newdata)
 				 }
                                  //if(sum(violation<0)<2) {
                                  //    tnn_d$centers[sel,] <- new_center 
-                                 double sum = 0;
+                                 int sum = 0;
                                  for(auto v : violation)
                                  {
-                                     sum += v.first;
+                                     sum += v.first>0?1:0;
                                  }
                                  if(sum < 2)
                                  {
