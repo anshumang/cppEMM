@@ -21,5 +21,5 @@
 
 void EMM::update()
 {
-   std::cout << "EMM::update()" << std::endl;
+   //std::cout << "EMM::update()" << std::endl;
 }

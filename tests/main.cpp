@@ -21,6 +21,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <sys/time.h>
 
 int main(int)
 {
@@ -52,7 +53,7 @@ int main(int)
        num_words++;
        if(num_words > 2)
        {
-         line_data.push_back(std::pair<double, std::string>(value, std::to_string(num_lines)));
+         line_data.push_back(std::pair<double, std::string>(std::log10(value), std::to_string(num_lines)));
        }
      }
      if(num_lines % 100000 == 0)
@@ -66,7 +67,25 @@ int main(int)
      data.push_back(line_data);
   }
   std::cout << num_words << " " << num_lines << " " << value << std::endl;
+  
+  struct timeval start, end;
+  gettimeofday(&start, NULL);
+  double avg=0, num_epochs=0;
+  for(int i=0; i<data.size(); i++)
+  {
+        if(i%432 == 0)
+        {
+           num_epochs++;
+           gettimeofday(&end, NULL);
+           avg = (avg*num_epochs + (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec))/(num_epochs+1);
+           std::cout << i << " " << (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec) << " " << avg << std::endl;
+           gettimeofday(&start, NULL);
+        }
+    named_matrix data_subset;
+    data_subset.push_back(data[i]);
+    emm.build(data_subset);
+  }
+  //emm.build(train_table);
 
-  emm.build(train_table);
   return 0;
 }
