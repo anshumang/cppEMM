@@ -23,5 +23,5 @@ void EMM::build(named_matrix newdata)
 {
   //std::cout << "EMM::build()" << std::endl;
   this->cluster(newdata);
-  this->update(newdata);
+  this->update();
 }

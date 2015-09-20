@@ -108,10 +108,11 @@ public:
 
 class SimpleMC
 {
+public:
   integer m_unused;
   int m_top;
   matrix m_counts;
-  names m_initial_counts;
+  named_vector m_initial_counts;
 
   static integer & u_wrap(int size)
   {
@@ -131,9 +132,9 @@ class SimpleMC
     return c;
   }
 
-  static names & ic_wrap(int size)
+  static named_vector & ic_wrap(int size)
   {
-    static names ic;
+    static named_vector ic;
     for(int i=0; i<size; i++)
     {
        ic.push_back(std::pair<double, std::string>(i, "NA"));
@@ -141,7 +142,6 @@ class SimpleMC
     return ic;
   }
 
-public:
   SimpleMC(int size=10);
   int smc_size();
   std::vector<std::string> smc_states();
@@ -154,6 +154,7 @@ public:
 
 class TRACDS
 {
+public:
   /*numeric*/double m_lambda;
   /*numeric*/double m_lambda_factor;
   SimpleMC* m_mm;
@@ -171,7 +172,6 @@ class TRACDS
     return lf;
   }
 
-public:
   TRACDS();
   TRACDS(/*numeric*/double lambda=l_wrap());
   int nstates();
@@ -200,10 +200,10 @@ public:
  EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambda);
  void build(named_matrix);
  void cluster(named_matrix);
- void update(named_matrix);
+ void update();
  EMM* predict();
  matrix transition_matrix();
- int add_state();
+ int add_state(std::string);
 };
 
 #endif

@@ -19,7 +19,7 @@
 
 #include "AllClasses.hpp"
 
-void EMM::update(named_matrix newdata)
+void EMM::update()
 {
    //std::cout << "EMM::update()" << std::endl;
    /*
@@ -32,6 +32,7 @@ void EMM::update(named_matrix newdata)
    std::vector<std::string> s = m_TRACDS->states();
    int pos_current = 0;
    std::string cs = m_TRACDS->current_state();
+   //matrix counts = m_TRACDS->m_mm->m_counts;
    int idx = 0;
    for(auto v : s)
    {
@@ -41,13 +42,59 @@ void EMM::update(named_matrix newdata)
      }
      idx++;
    }
-   for(int i=0;i<newdata.size();i++)
+   for(auto i : m_new_data)
    {
+     //## cluster returns NA if we start a new sequence.
+     if(i[0].second == "NA")
+     {
+        pos_current = 0;
+        continue;
+     }
 
+     //## fade TRACDS structure?
+     //### FIXME: counts!!!
+     if(m_lambda > 0)
+     {
+           int idx = 0;
+           for(auto v : m_TRACDS->m_mm->m_initial_counts)
+           {
+               m_TRACDS->m_mm->m_initial_counts[idx] = std::pair<double, std::string>(m_TRACDS->m_mm->m_initial_counts[idx].first * m_lambda_factor, m_TRACDS->m_mm->m_initial_counts[idx].second);
+               idx++;
+           }
+           int row=0, col=0;
+           for (auto r : m_TRACDS->m_mm->m_counts)
+           {
+              for(auto c : r)
+              {
+                 m_TRACDS->m_mm->m_counts[row][col] = m_TRACDS->m_mm->m_counts[row][col] * m_lambda_factor;
+                 col++;
+              }
+              row++; col=0;
+           }
+     }     
+     //## state exists?
+     //pos_new <- which(states(x) == sel)
+     int pos_new = -1;
+     int idx=0;
+     for(auto v : s)
+     {
+       if(v == i[0].second)
+       {
+         pos_new = idx;
+       }
+       idx++;
+     }
+
+     //## no: create state
+     //if(!length(pos_new)) pos_new <- .addState(sel)
+     if(pos_new < 0)
+     {
+        add_state(i[0].second);
+     }
    }
 }
 
-int EMM::add_state()
+int EMM::add_state(std::string name)
 {
           /*
 		## expand?
