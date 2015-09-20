@@ -21,11 +21,13 @@
 
 int SimpleMC::smc_size()
 {
-  return m_unused.size() - m_top;
+  //length(x@unused) - x@top
+  return m_unused.size() - m_top-1;
 }
 
 std::vector<std::string> SimpleMC::smc_states()
 {
+  //names(x@initial_counts)[!is.na(names(x@initial_counts))] 
   std::vector<std::string> states;
   for(auto ic : m_initial_counts)
   {

@@ -117,12 +117,18 @@ public:
   static integer & u_wrap(int size)
   {
     static integer u(size);
+    int idx=0;
+    for(auto i : u)
+    {
+       u[idx] = size-idx;
+       idx++;
+    }
     return u;
   }
 
   static int & t_wrap(int size)
   {
-    static int t=size;
+    static int t=size-1;
     return t;
   }
 
@@ -150,6 +156,7 @@ public:
   SimpleMC* smc_contract();
   void smc_fade(double);
   named_matrix smc_countMatrix();
+  int add_state(std::string);
 };
 
 class TRACDS
@@ -203,7 +210,6 @@ public:
  void update();
  EMM* predict();
  matrix transition_matrix();
- int add_state(std::string);
 };
 
 #endif
