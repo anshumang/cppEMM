@@ -58,7 +58,6 @@ void EMM::cluster(named_matrix newdata)
         }*/
         if(m_tNN->nclusters()<1)
         {
-           //std::cout << "new data " << i << std::endl;
            std::string sel("1");
            int idx=0;
            for(auto nv : nd)
@@ -67,14 +66,14 @@ void EMM::cluster(named_matrix newdata)
               idx++;
            }
            newdata_updated.push_back(nd);
+           //std::cout << "new data(nclusters()<1) " << i << std::endl;
            m_tNN->m_centers.push_back(nd);
            m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
            m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
         }
         else
         {
-           //std::cout << "new data " << i << std::endl;
-
+           //std::cout << "new data (nclusters()>=1) " << i << std::endl;
            /*## find a matching state
            #sel <- find_clusters(x, nd, match_cluster="exact")
            ### all with inside<=0 are matches
@@ -115,7 +114,7 @@ void EMM::cluster(named_matrix newdata)
            std::string sel("NA");
            if(matches.size()==0)
            {
-               std::cout << "# matches " << matches.size() << " " << m_tNN->m_centers.size() << std::endl;
+               //std::cout << "# matches " << matches.size() << " " << m_tNN->m_centers.size() << std::endl;
                sel = "NA";
            }
            else if(matches.size()==1)
@@ -173,6 +172,7 @@ void EMM::cluster(named_matrix newdata)
                     idx++;
                 }
                 newdata_updated.push_back(nd);
+		//std::cout << "new data(nclustes()>=1, sel==NA)" << i << std::endl;
 		m_tNN->m_centers.push_back(nd);
                 m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
                 m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
@@ -338,6 +338,7 @@ void EMM::cluster(named_matrix newdata)
 				idx++;
 			}
 			newdata_updated.push_back(nd);
+			//std::cout << "new data(nclustes()>=1, sel!=NA)" << i << std::endl;
                         /*tnn_d$counts[sel] <- tnn_d$counts[sel] + 1*/
 			idx=0;
 			for(auto m : m_tNN->m_counts)
@@ -352,5 +353,15 @@ void EMM::cluster(named_matrix newdata)
                 } /*if(sel != "NA")*/
            } /*if(m_tNN->nclusters()>=1)*/
       } /*for(int i=0; i<newdata.size(); i++)*/
-      std::copy(newdata_updated.begin(), newdata_updated.end(), m_new_data.begin());
+      //std::copy(newdata_updated.begin(), newdata_updated.end(), m_new_data.begin());
+      m_new_data.clear();
+      for(auto r : newdata_updated)
+      {
+           named_vector row;
+           for(auto c : r)
+           {
+               row.push_back(c);
+           }
+           m_new_data.push_back(row);          
+      }
 }

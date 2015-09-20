@@ -18,7 +18,7 @@
 
 cmake_minimum_required (VERSION 3.3.1)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+set(CMAKE_CXX_FLAGS "-g -std=c++11 -stdlib=libc++")
 
 project (cppEMM)
 

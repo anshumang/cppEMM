@@ -16,6 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+set(CMAKE_BUILD_TYPE Debug)
 add_library(cppEMM AllClasses.cpp SimpleMC.cpp TRACDS.cpp tNN.cpp build.cpp update.cpp cluster.cpp predict.cpp transition.cpp)
 
 target_include_directories (cppEMM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

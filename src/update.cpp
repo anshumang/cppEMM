@@ -21,7 +21,7 @@
 
 void EMM::update()
 {
-   //std::cout << "EMM::update()" << std::endl;
+   //std::cout << "EMM::update() " << m_new_data.size() << std::endl;
    /*
 	    tracds_d <- x@tracds_d  ### get the environment
 	    
@@ -41,6 +41,7 @@ void EMM::update()
      if(v == cs)
      {
        pos_current = idx;
+       break;
      }
      idx++;
    }
@@ -84,6 +85,7 @@ void EMM::update()
        if(v == i[0].second)
        {
          pos_new = idx;
+         break;
        }
        idx++;
      }
@@ -152,6 +154,7 @@ int SimpleMC::add_state(std::string name)
 		    tracds_d$mm@top <- old_size+tracds_d$mm@top
 		}
          */
+         //std::cout << "add state " << name << std::endl;
          if(m_top < 0)
          {
             int old_size = smc_size();
