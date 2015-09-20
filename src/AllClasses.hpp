@@ -194,14 +194,16 @@ class EMM
  double m_lambda;
  double m_lambda_factor;
  double m_threshold;
+ named_matrix m_new_data;
 public:
  EMM();
  EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambda);
  void build(named_matrix);
  void cluster(named_matrix);
- void update();
+ void update(named_matrix);
  EMM* predict();
  matrix transition_matrix();
+ int add_state();
 };
 
 #endif

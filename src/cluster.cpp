@@ -26,7 +26,7 @@ void EMM::cluster(named_matrix newdata)
     stringvec sv(newdata.size(), " ");
     //m_tNN->set_last(sv);
     m_tNN->m_last = sv;
-
+    named_matrix newdata_updated;
     for(int i=0; i<newdata.size(); i++)
     {
         named_vector nd = newdata[i]; //nd <- newdata[i,, drop = FALSE]
@@ -63,9 +63,10 @@ void EMM::cluster(named_matrix newdata)
            int idx=0;
            for(auto nv : nd)
            {
-              nd[idx] = std::pair<double, std::string>(nd[idx].first, sel);
+              nd[idx] = std::pair<double, std::string>(nv.first, sel);
               idx++;
            }
+           newdata_updated.push_back(nd);
            m_tNN->m_centers.push_back(nd);
            m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
            m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
@@ -171,6 +172,7 @@ void EMM::cluster(named_matrix newdata)
                     nd[idx] = std::pair<double, std::string>(n.first, sel);
                     idx++;
                 }
+                newdata_updated.push_back(nd);
 		m_tNN->m_centers.push_back(nd);
                 m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
                 m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
@@ -329,8 +331,15 @@ void EMM::cluster(named_matrix newdata)
                              } /*if(matches.size() >= 2)*/
                           #endif
                         } /*if(m_tNN->m_centroids == false)*/
+			int idx = 0;
+			for(auto n : nd)
+			{
+				nd[idx] = std::pair<double, std::string>(n.first, sel);
+				idx++;
+			}
+			newdata_updated.push_back(nd);
                         /*tnn_d$counts[sel] <- tnn_d$counts[sel] + 1*/
-			int idx=0;
+			idx=0;
 			for(auto m : m_tNN->m_counts)
 			{
 				if(m.second == sel)
@@ -343,4 +352,5 @@ void EMM::cluster(named_matrix newdata)
                 } /*if(sel != "NA")*/
            } /*if(m_tNN->nclusters()>=1)*/
       } /*for(int i=0; i<newdata.size(); i++)*/
+      std::copy(newdata_updated.begin(), newdata_updated.end(), m_new_data.begin());
 }
