@@ -208,8 +208,9 @@ public:
  void build(named_matrix);
  void cluster(named_matrix);
  void update();
- std::string predict();
+ std::string predict(std::string current_state = "NULL", int n=1);
  matrix transition_matrix();
+ int prob_max(std::vector<double>);
 };
 
 #endif

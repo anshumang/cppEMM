@@ -18,9 +18,50 @@
 */
 
 #include "AllClasses.hpp"
+#include <cassert>
 
-std::string EMM::predict()
+int EMM::prob_max(std::vector<double> x)
 {
+   auto max = std::max_element(x.begin(), x.end());
+   /*choose the first occurence - FIXME - need to randomize choice*/
+   auto result = std::find(std::begin(x), std::end(x), max[0]);
+   return std::distance(result, x.begin());
+}
+
+std::string EMM::predict(std::string current_state, int n)
+{
+   std::string sel("NA");
    /*TO BE ADDED*/
-   return this;
+   if(current_state == "NULL")
+   {
+       current_state = m_TRACDS->current_state();
+   }
+   int current_state_i=-1;
+   std::vector<std::string> states = m_TRACDS->states();
+   int idx=0;
+   for(auto s: states)
+   {
+      if(s == current_state)
+      {
+          current_state_i = idx;
+          break; //current_state is singleton?
+      }
+      idx++;
+   }
+   assert(current_state_i>=0);
+   matrix P = transition_matrix();
+   if(n>1)
+   {
+     /*matrix product of P - not supported yet*/
+     assert(n==1);
+   }
+   std::vector<double> prob;
+   for(auto v : P[current_state_i])
+   {
+     prob.push_back(v);
+   }
+
+   sel = states[prob_max(prob)];
+   
+   return sel;
 }

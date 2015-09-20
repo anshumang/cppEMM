@@ -18,10 +18,49 @@
 */
 
 #include "AllClasses.hpp"
+#include <numeric>
 
 matrix EMM::transition_matrix()
 {
-  matrix m;
+  matrix m(m_TRACDS->m_mm->m_counts.size(), std::vector<double>(m_TRACDS->m_mm->m_counts.size(), 0));
   /*TO BE ADDED*/
+  m_TRACDS->m_mm->smc_countMatrix();
+  /*prior equals TRUE not supported yet*/
+  //if(prior) m <- m+1
+ 
+  /*Only supporting type = probability now*/
+  //if(type=="counts") return(m)
+
+  //rs <- rowSums(m)
+  //prob <- m/rs
+
+  //## we have to handle absorbing states here (row sum is 0)
+  //absorbing <- which(rs==0)
+  //prob[absorbing,] <- 0
+  //for(i in absorbing) prob[i,i] <- 1
+
+  std::vector<int> absorbing;
+  int row=0, col=0;
+  for(auto r : m_TRACDS->m_mm->m_counts)
+  {
+     double rowsum = std::accumulate(r.begin(), r.end(), 0);
+     if(rowsum == 0)
+     {
+       std::fill(m[row].begin(), m[row].end(), 0);
+       m[row][row] = 1; 
+     }
+     else
+     {
+       std::transform(r.begin(), r.end(), m[row].begin(), [rowsum](double val){return val/rowsum;});
+     /*for(auto c : r)
+     {
+        m[row][col] = c[col]/rowsum;
+        col++;
+     }*/
+     }
+     row++;
+     col=0;
+  }
+
   return m;
 }
