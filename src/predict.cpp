@@ -19,7 +19,7 @@
 
 #include "AllClasses.hpp"
 
-EMM* EMM::predict()
+std::string EMM::predict()
 {
    /*TO BE ADDED*/
    return this;

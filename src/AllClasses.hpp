@@ -99,7 +99,7 @@ public:
   tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), /*logical*/bool centroids=c_wrap(/*getMeasure(this)*/m_wrap(), std::string("euclidean")), /*numeric*/double lambda=l_wrap());
 
   tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), /*numeric*/double lambda=l_wrap());
-  named_matrix cluster_centers();
+  named_vector cluster_centers(std::string);
   stringvec last_clustering(bool remove=false);
   void set_last(stringvec);
   void update_last(int, std::string);
@@ -208,7 +208,7 @@ public:
  void build(named_matrix);
  void cluster(named_matrix);
  void update();
- EMM* predict();
+ std::string predict();
  matrix transition_matrix();
 };
 

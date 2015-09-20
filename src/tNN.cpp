@@ -19,9 +19,18 @@
 
 #include "AllClasses.hpp"
 
-named_matrix tNN::cluster_centers()
+named_vector tNN::cluster_centers(std::string sel)
 {
-   return m_centers;
+   named_vector center;
+   for(auto c : m_centers)
+   {
+       if(c[0].second == sel)
+       {
+            std::copy(c.begin(), c.end(), center.begin());
+            break;
+       }
+   }
+   return center;
 }
 
 int tNN::nclusters()
