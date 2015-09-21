@@ -39,7 +39,7 @@ std::string EMM::predict(std::string current_state, int n)
    int current_state_i=-1;
    std::vector<std::string> states = m_TRACDS->states();
    //std::cout << "Current state " << current_state <<  " states.size() " << states.size() <<  " states.back() " << states.back() << std::endl;
-   std::cout << "predict " << current_state << std::endl;
+   //std::cout << "predict " << current_state << std::endl;
    int idx=0;
    for(auto s: states)
    {

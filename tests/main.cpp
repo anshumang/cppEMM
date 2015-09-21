@@ -78,7 +78,7 @@ int main(int)
            num_epochs++;
            gettimeofday(&end, NULL);
            avg = (avg*num_epochs + (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec))/(num_epochs+1);
-           std::cout << i << " " << (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec) << " " << avg << std::endl;
+           std::cout << i << " " << (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec) << " " << avg << " " << emm.nclusters() << " " << emm.nstates() << std::endl;
            gettimeofday(&start, NULL);
         }
     named_matrix data_subset;

@@ -360,7 +360,7 @@ void EMM::cluster(named_matrix newdata)
            named_vector row;
            for(auto c : r)
            {
-               std::cout << "cluster " << c.first << " " << c.second << std::endl;
+               //std::cout << "cluster " << c.first << " " << c.second << std::endl;
                row.push_back(c);
            }
            m_new_data.push_back(row);          

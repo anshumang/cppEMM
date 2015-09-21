@@ -195,6 +195,7 @@ public:
 //class EMMAggregate 
 class EMM 
 {
+public:
  //tNN<int> m_tNN;
  tNN* m_tNN;
  TRACDS* m_TRACDS; 
@@ -205,6 +206,8 @@ class EMM
 public:
  EMM();
  EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambda);
+ int nclusters();
+ int nstates();
  void build(named_matrix);
  void cluster(named_matrix);
  void update();

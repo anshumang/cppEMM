@@ -51,7 +51,7 @@ void EMM::update()
    {
      if(dim_idx == 0)
      {
-        std::cout << "update key " << i[0].second << " " << cs << std::endl;
+        //std::cout << "update key " << i[0].second << " " << cs << std::endl;
      }
      dim_idx++;
 
@@ -61,7 +61,7 @@ void EMM::update()
         pos_current = -1;
         continue;
      }
-     std::cout << "i[0].second 1 " << i[0].second << std::endl; 
+     //std::cout << "i[0].second 1 " << i[0].second << std::endl; 
 
      //## fade TRACDS structure?
      //### FIXME: counts!!!
@@ -84,7 +84,7 @@ void EMM::update()
               row++; col=0;
            }
      }     
-     std::cout << "i[0].second 2 " << i[0].second << std::endl; 
+     //std::cout << "i[0].second 2 " << i[0].second << std::endl; 
      //## state exists?
      //pos_new <- which(states(x) == sel) //can pos_new be a vector?
      int pos_new = -1;
@@ -98,8 +98,8 @@ void EMM::update()
        }
        idx++;
      }
-     std::cout << "update pos_new " << pos_new  << " pos_current " << pos_current << std::endl;
-     std::cout << "i[0].second 3 " << i[0].second << std::endl; 
+     //std::cout << "update pos_new " << pos_new  << " pos_current " << pos_current << std::endl;
+     //std::cout << "i[0].second 3 " << i[0].second << std::endl; 
 
      //## no: create state
      //if(!length(pos_new)) pos_new <- .addState(sel)
@@ -107,7 +107,7 @@ void EMM::update()
      {
        pos_new = m_TRACDS->m_mm->add_state(i[0].second);
      }
-     std::cout << "i[0].second 4 " << i[0].second << std::endl; 
+     //std::cout << "i[0].second 4 " << i[0].second << std::endl; 
 
      //## add transition
      //## no current state?
@@ -125,17 +125,17 @@ void EMM::update()
      {
           m_TRACDS->m_mm->m_counts[pos_current][pos_new] = m_TRACDS->m_mm->m_counts[pos_current][pos_new] + 1;
      }
-     std::cout << "i[0].second 5 " << i[0].second << std::endl; 
+     //std::cout << "i[0].second 5 " << i[0].second << std::endl; 
      //## update current_state
      //pos_current <- pos_new
      pos_current = pos_new;
      sel = i[0].second;
-     std::cout << "update end of one tuple pos_new " << pos_new << " pos_current " << pos_current << " sel " << sel << " i[0].second " << i[0].second << " " << m_new_data.size() << std::endl;
+     //std::cout << "update end of one tuple pos_new " << pos_new << " pos_current " << pos_current << " sel " << sel << " i[0].second " << i[0].second << " " << m_new_data.size() << std::endl;
      for(auto r : m_new_data)
      {
           for(auto c : r)
           {
-             std::cout << "update " << c.first << " " << c.second << std::endl;
+             //std::cout << "update " << c.first << " " << c.second << std::endl;
           }
      }
    }
@@ -143,7 +143,7 @@ void EMM::update()
    //## save the last state as current
    //tracds_d$current_state <- sel
    m_TRACDS->m_current_state = sel;
-   std::cout << "update " << m_TRACDS->m_current_state << " " << sel << std::endl;
+   //std::cout << "update " << m_TRACDS->m_current_state << " " << sel << std::endl;
 }
 
 int SimpleMC::add_state(std::string name)

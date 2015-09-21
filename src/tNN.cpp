@@ -33,6 +33,11 @@ named_vector tNN::cluster_centers(std::string sel)
    return center;
 }
 
+int EMM::nclusters()
+{
+   return m_tNN->nclusters();
+}
+
 int tNN::nclusters()
 {
    return m_centers.size();

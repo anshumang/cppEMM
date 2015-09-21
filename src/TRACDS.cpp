@@ -19,6 +19,11 @@
 
 #include "AllClasses.hpp"
 
+int EMM::nstates()
+{
+   return m_TRACDS->nstates();
+}
+
 int TRACDS::nstates()
 {
    return m_mm->smc_size(); 
