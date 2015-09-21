@@ -176,9 +176,11 @@ int SimpleMC::add_state(std::string name)
 		    tracds_d$mm@top <- old_size+tracds_d$mm@top
 		}
          */
-         //std::cout << "add state " << name << std::endl;
+         bool resize=false;
          if(m_top < 0)
          {
+            resize=true;
+            std::cout << "add state " << name  << " smc_size " << smc_size() << std::endl;
             int old_size = smc_size();
             int new_size = old_size * 2;
             matrix new_counts(new_size, std::vector<double>(new_size, 0));
@@ -188,7 +190,7 @@ int SimpleMC::add_state(std::string name)
                std::copy(m_counts[r].begin(), m_counts[r].end(), new_counts[r].begin());
                r++;
             }
-            //std::cout << "Copied old counts..." <<std::endl;
+            std::cout << "Copied old counts..." <<std::endl;
 
             m_counts.resize(new_counts.size(), std::vector<double>(new_counts.size()));
             r=0;
@@ -197,7 +199,7 @@ int SimpleMC::add_state(std::string name)
                std::copy(new_counts[r].begin(), new_counts[r].end(), m_counts[r].begin());
                r++;
             }
-            //std::cout << "Copied resized old counts back..." <<std::endl;
+            std::cout << "Copied resized old counts back..." <<std::endl;
 
             named_vector new_initial_counts(new_size);
             int idx=0;
@@ -222,6 +224,7 @@ int SimpleMC::add_state(std::string name)
                std::cout << " " << i.second;
             }
 	    std::cout << std::endl;*/
+            std::cout << "copied initial_counts..." << std::endl;
 
             std::vector<int> new_unused(new_size);
             idx = 0;
@@ -241,6 +244,7 @@ int SimpleMC::add_state(std::string name)
             std::copy(new_unused.begin(), new_unused.end(), m_unused.begin());
 
             m_top = m_top + old_size - 1;
+            std::cout << "copied unused..." << std::endl;
 	    /*std::cout << "m_unused(creating state)";
             for(auto i : m_unused)
             {
@@ -271,5 +275,11 @@ int SimpleMC::add_state(std::string name)
          m_unused[m_top] = -1;
          m_top = m_top - 1;
          m_initial_counts[pos-1] = std::pair<double, std::string>(0, name);
+         if(resize == true)
+         {
+           resize = false;
+           std::cout << "resize done..." << std::endl;
+         }
+
          return pos-1;
 }

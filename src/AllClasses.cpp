@@ -52,7 +52,7 @@ TRACDS::TRACDS()
 {
   m_lambda=l_wrap();
   m_lambda_factor=lf_wrap();
-  m_mm=new SimpleMC();
+  m_mm=new SimpleMC(200);
   m_current_state = "NA";
 }
 
@@ -61,7 +61,7 @@ TRACDS::TRACDS(/*numeric*/double lambda)
 {
   std::cout << "TRACDS CTOR" << std::endl;
   m_lambda_factor=lf_wrap();
-  m_mm=new SimpleMC();
+  m_mm=new SimpleMC(200);
   m_current_state = "NA";
 }
 

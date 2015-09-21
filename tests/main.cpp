@@ -68,11 +68,20 @@ int main(int)
   }
   std::cout << num_words << " " << num_lines << " " << value << std::endl;
   
+  int i=0;
+  named_matrix data_subset;
+  data_subset.push_back(data[i]);
+  i++;
+  emm.build(data_subset);
+  data_subset.clear();
+
   struct timeval start, end;
   gettimeofday(&start, NULL);
   double avg=0, num_epochs=0;
-  for(int i=0; i<data.size(); i++)
+  for(; i<data.size(); i++)
   {
+    //std::cout << i << std::endl;
+    std::string pred_state = emm.predict();
         if(i%432 == 0)
         {
            num_epochs++;
@@ -81,10 +90,9 @@ int main(int)
            std::cout << i << " " << (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec) << " " << avg << " " << emm.nclusters() << " " << emm.nstates() << std::endl;
            gettimeofday(&start, NULL);
         }
-    named_matrix data_subset;
     data_subset.push_back(data[i]);
     emm.build(data_subset);
-    std::string pred_state = emm.predict();
+    data_subset.clear();
   }
   //emm.build(train_table);
 
