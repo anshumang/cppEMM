@@ -84,6 +84,7 @@ int main(int)
     named_matrix data_subset;
     data_subset.push_back(data[i]);
     emm.build(data_subset);
+    std::string pred_state = emm.predict();
   }
   //emm.build(train_table);
 

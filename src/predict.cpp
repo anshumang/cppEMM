@@ -25,7 +25,7 @@ int EMM::prob_max(std::vector<double> x)
    auto max = std::max_element(x.begin(), x.end());
    /*choose the first occurence - FIXME - need to randomize choice*/
    auto result = std::find(std::begin(x), std::end(x), max[0]);
-   return std::distance(result, x.begin());
+   return std::distance(x.begin(), result);
 }
 
 std::string EMM::predict(std::string current_state, int n)
@@ -38,6 +38,8 @@ std::string EMM::predict(std::string current_state, int n)
    }
    int current_state_i=-1;
    std::vector<std::string> states = m_TRACDS->states();
+   //std::cout << "Current state " << current_state <<  " states.size() " << states.size() <<  " states.back() " << states.back() << std::endl;
+   std::cout << "predict " << current_state << std::endl;
    int idx=0;
    for(auto s: states)
    {
@@ -61,6 +63,7 @@ std::string EMM::predict(std::string current_state, int n)
      prob.push_back(v);
    }
 
+   //std::cout << "Predicted state " << prob_max(prob) << std::endl;
    sel = states[prob_max(prob)];
    
    return sel;

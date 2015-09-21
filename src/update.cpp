@@ -46,14 +46,22 @@ void EMM::update()
      idx++;
    }
    std::string sel("NA");
+   int dim_idx=0;
    for(auto i : m_new_data)
    {
+     if(dim_idx == 0)
+     {
+        std::cout << "update key " << i[0].second << " " << cs << std::endl;
+     }
+     dim_idx++;
+
      //## cluster returns NA if we start a new sequence.
      if(i[0].second == "NA")
      {
         pos_current = -1;
         continue;
      }
+     std::cout << "i[0].second 1 " << i[0].second << std::endl; 
 
      //## fade TRACDS structure?
      //### FIXME: counts!!!
@@ -76,6 +84,7 @@ void EMM::update()
               row++; col=0;
            }
      }     
+     std::cout << "i[0].second 2 " << i[0].second << std::endl; 
      //## state exists?
      //pos_new <- which(states(x) == sel) //can pos_new be a vector?
      int pos_new = -1;
@@ -89,13 +98,16 @@ void EMM::update()
        }
        idx++;
      }
+     std::cout << "update pos_new " << pos_new  << " pos_current " << pos_current << std::endl;
+     std::cout << "i[0].second 3 " << i[0].second << std::endl; 
 
      //## no: create state
      //if(!length(pos_new)) pos_new <- .addState(sel)
      if(pos_new < 0)
      {
-       m_TRACDS->m_mm->add_state(i[0].second);
+       pos_new = m_TRACDS->m_mm->add_state(i[0].second);
      }
+     std::cout << "i[0].second 4 " << i[0].second << std::endl; 
 
      //## add transition
      //## no current state?
@@ -113,15 +125,25 @@ void EMM::update()
      {
           m_TRACDS->m_mm->m_counts[pos_current][pos_new] = m_TRACDS->m_mm->m_counts[pos_current][pos_new] + 1;
      }
+     std::cout << "i[0].second 5 " << i[0].second << std::endl; 
      //## update current_state
      //pos_current <- pos_new
      pos_current = pos_new;
      sel = i[0].second;
+     std::cout << "update end of one tuple pos_new " << pos_new << " pos_current " << pos_current << " sel " << sel << " i[0].second " << i[0].second << " " << m_new_data.size() << std::endl;
+     for(auto r : m_new_data)
+     {
+          for(auto c : r)
+          {
+             std::cout << "update " << c.first << " " << c.second << std::endl;
+          }
+     }
    }
 
    //## save the last state as current
    //tracds_d$current_state <- sel
    m_TRACDS->m_current_state = sel;
+   std::cout << "update " << m_TRACDS->m_current_state << " " << sel << std::endl;
 }
 
 int SimpleMC::add_state(std::string name)
@@ -166,10 +188,20 @@ int SimpleMC::add_state(std::string name)
                std::copy(m_counts[r].begin(), m_counts[r].end(), new_counts[r].begin());
                r++;
             }
-            m_counts = new_counts;
+            //std::cout << "Copied old counts..." <<std::endl;
+
+            m_counts.resize(new_counts.size(), std::vector<double>(new_counts.size()));
+            r=0;
+            for(auto m : new_counts)
+            {
+               std::copy(new_counts[r].begin(), new_counts[r].end(), m_counts[r].begin());
+               r++;
+            }
+            //std::cout << "Copied resized old counts back..." <<std::endl;
 
             named_vector new_initial_counts(new_size);
             int idx=0;
+            
             for(auto i : new_initial_counts)
             {
                 if(idx < m_initial_counts.size())
@@ -182,7 +214,14 @@ int SimpleMC::add_state(std::string name)
                 }
                 idx++;
             } 
-            m_initial_counts = new_initial_counts;
+            m_initial_counts.resize(new_initial_counts.size());
+            std::copy(new_initial_counts.begin(), new_initial_counts.end(), m_initial_counts.begin());
+	    /*std::cout << "Initial counts";
+            for(auto i : m_initial_counts)
+            {
+               std::cout << " " << i.second;
+            }
+	    std::cout << std::endl;*/
 
             std::vector<int> new_unused(new_size);
             idx = 0;
@@ -198,8 +237,16 @@ int SimpleMC::add_state(std::string name)
                 }
                 idx++;
             }
+            m_unused.resize(new_unused.size());
+            std::copy(new_unused.begin(), new_unused.end(), m_unused.begin());
 
             m_top = m_top + old_size - 1;
+	    /*std::cout << "m_unused(creating state)";
+            for(auto i : m_unused)
+            {
+               std::cout << " " << i;
+            }
+	    std::cout << " m_top " << m_top << std::endl;*/
          }
 
          /*
@@ -214,7 +261,15 @@ int SimpleMC::add_state(std::string name)
 		pos
          */
          int pos = m_unused[m_top];
+         /*std::cout << "pos " << pos << " m_top " << m_top << std::endl;
+         std::cout << "m_unused";
+         for(auto i : m_unused)
+         {
+            std::cout << " " << i;
+         }
+         std::cout << std::endl;*/
          m_unused[m_top] = -1;
          m_top = m_top - 1;
          m_initial_counts[pos-1] = std::pair<double, std::string>(0, name);
+         return pos-1;
 }
