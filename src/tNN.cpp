@@ -33,16 +33,17 @@ named_vector tNN::cluster_centers(std::string sel)
    return center;
 }
 
-int EMM::nclusters()
+/*int EMM::nclusters()
 {
    return m_tNN->nclusters();
-}
+}*/
 
 int tNN::nclusters()
 {
    return m_centers.size();
 }
 
+/*
 stringvec tNN::last_clustering(bool remove)
 {
    if(remove)
@@ -51,7 +52,7 @@ stringvec tNN::last_clustering(bool remove)
      m_last.push_back("NA");
    }
    return m_last; 
-}
+}*/
 
 void tNN::set_last(stringvec sv)
 {

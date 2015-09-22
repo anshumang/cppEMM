@@ -100,7 +100,7 @@ public:
 
   tNN(/*numeric*/double threshold=t_wrap(), character measure=m_wrap(), /*numeric*/double lambda=l_wrap());
   named_vector cluster_centers(std::string);
-  stringvec last_clustering(bool remove=false);
+  //stringvec last_clustering(bool remove=false);
   void set_last(stringvec);
   void update_last(int, std::string);
   int nclusters();
@@ -206,7 +206,7 @@ public:
 public:
  EMM();
  EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambda);
- int nclusters();
+ //int nclusters();
  int nstates();
  void build(named_matrix);
  void cluster(named_matrix);
@@ -214,6 +214,11 @@ public:
  std::string predict(std::string current_state = "NULL", int n=1);
  matrix transition_matrix();
  int prob_max(std::vector<double>);
+ std::string clusters();
+ std::string nclusters();
+ std::string cluster_counts();
+ std::string cluster_centers();
+ std::string last_clustering();
 };
 
 #endif

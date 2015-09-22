@@ -66,7 +66,7 @@ TRACDS::TRACDS(/*numeric*/double lambda)
 }
 
 EMM::EMM(/*numeric*/double threshold, character measure, /*numeric*/double lambda) /*variadic constructors - HOWTO?*/
-: m_tNN(new tNN(threshold, measure, lambda)),
+: m_tNN(new tNN(threshold, measure, true, lambda)),
   m_TRACDS(new TRACDS(lambda)),
   m_threshold(threshold),
   m_lambda(lambda)

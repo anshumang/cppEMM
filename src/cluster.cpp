@@ -25,7 +25,7 @@ void EMM::cluster(named_matrix newdata)
     //tnn_d$last <- character(nrow(newdata))
     stringvec sv(newdata.size(), " ");
     //m_tNN->set_last(sv);
-    m_tNN->m_last = sv;
+    //m_tNN->m_last = sv;
     named_matrix newdata_updated;
     for(int i=0; i<newdata.size(); i++)
     {
@@ -70,6 +70,7 @@ void EMM::cluster(named_matrix newdata)
            m_tNN->m_centers.push_back(nd);
            m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
            m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
+	   sv.push_back(sel);
         }
         else
         {
@@ -176,6 +177,7 @@ void EMM::cluster(named_matrix newdata)
 		m_tNN->m_centers.push_back(nd);
                 m_tNN->m_counts.push_back(std::pair<double, std::string>(1,sel));
                 m_tNN->m_var_thresholds.push_back(std::pair<double, std::string>(m_threshold, sel));
+		sv.push_back(sel);
              }
              else
              {
@@ -214,6 +216,8 @@ void EMM::cluster(named_matrix newdata)
                         ## update counts
                         tnn_d$counts[sel] <- tnn_d$counts[sel] + 1*/
 
+                        //std::cout << "assign observation to existing node, centroids " << m_tNN->m_centroids << std::endl;
+
                         if(m_tNN->m_centroids)
                         {
                       #if 1
@@ -239,10 +243,20 @@ void EMM::cluster(named_matrix newdata)
                              {
                                 if(m[0].second == sel)
                                 {
-                                   std::copy(m.begin(), m.end(), new_center.begin());
+                                   for(auto c : m)
+                                   {
+                                       new_center.push_back(c);
+                                   }
+                                   //std::copy(m.begin(), m.end(), new_center.begin());
                                    break;
                                 }
                              }
+                             /*std::cout << "new center";
+                             for(auto t : new_center)
+                             {
+                                std::cout << " " << t.first;
+                             }
+                             std::cout << " from m_centers" << std::endl;*/
                              double counts = 0;
                              for(auto v: m_tNN->m_counts)
                              {
@@ -256,6 +270,12 @@ void EMM::cluster(named_matrix newdata)
                              {
                                 new_center[v] = std::pair<double, std::string>((new_center[v].first * counts + nd[v].first) / (counts+1), new_center[v].second);    
                              }
+                             /*std::cout << "new center";
+                             for(auto t : new_center)
+                             {
+                                std::cout << " " << t.first;
+                             }
+                             std::cout << " after move" << std::endl;*/
 
                              //replace NAs
                              for(auto v : nas)
@@ -271,7 +291,7 @@ void EMM::cluster(named_matrix newdata)
                                 {
                                     if(m[0].second == new_center[0].second)
                                     {
-				        std::cout << "Single match" << std::endl;
+				        //std::cout << "Single match" << std::endl;
                                         m_tNN->m_centers[idx] = new_center;
                                         break;
                                     }
@@ -302,7 +322,7 @@ void EMM::cluster(named_matrix newdata)
 						 dist += std::pow((v.first - w[idxdim].first),2);
 						 idxdim++;
 					 }
-					 inside[idxnumc] = std::pair<double, std::string>(std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first, w[0].second);
+					 violation[idxnumc] = std::pair<double, std::string>(std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first, w[0].second);
 					 idxnumc++;
 					 idxdim=0;
 				 }
@@ -320,7 +340,7 @@ void EMM::cluster(named_matrix newdata)
 					 {
 						 if(m[0].second == new_center[0].second)
 						 {
-                                                         std::cout << matches.size() << " matches, single violation" << std::endl;
+                                                         //std::cout << matches.size() << " matches, single violation" << std::endl;
 							 m_tNN->m_centers[idx] = new_center;
 							 break;
 						 }
@@ -350,10 +370,16 @@ void EMM::cluster(named_matrix newdata)
 				}
 				idx++;
 			}
+                        sv.push_back(sel);
                 } /*if(sel != "NA")*/
            } /*if(m_tNN->nclusters()>=1)*/
       } /*for(int i=0; i<newdata.size(); i++)*/
       //std::copy(newdata_updated.begin(), newdata_updated.end(), m_new_data.begin());
+      m_tNN->m_last.clear();
+      for(auto r : sv)
+      {
+           m_tNN->m_last.push_back(r);
+      }
       m_new_data.clear();
       for(auto r : newdata_updated)
       {
@@ -365,4 +391,58 @@ void EMM::cluster(named_matrix newdata)
            }
            m_new_data.push_back(row);          
       }
+}
+
+std::string EMM::clusters()
+{
+   std::string result("");
+   for(auto v : m_tNN->m_centers)
+   {
+     result += v[0].second;
+     result += " ";
+   }
+   return result;
+}
+
+std::string EMM::nclusters()
+{
+   std::string result;
+   result = std::to_string(m_tNN->m_centers.size());
+   return result;
+}
+
+std::string EMM::last_clustering()
+{
+    std::string result("");
+    for (auto s : m_tNN->m_last)
+    {
+       result += s;
+       result += " ";
+    }
+    return result;
+}
+
+std::string EMM::cluster_centers()
+{
+    std::string result("");
+    for(auto r : m_tNN->m_centers)
+    {
+      for(auto c : r)
+      {
+         result += std::to_string(c.first);
+         result += " ";
+      }
+    }
+    return result;
+}
+
+std::string EMM::cluster_counts()
+{
+    std::string result("");
+    for(auto c : m_tNN->m_counts)
+    {
+        result += std::to_string(c.first);
+        result += " ";
+    }
+    return result;
 }
