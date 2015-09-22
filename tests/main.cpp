@@ -72,22 +72,22 @@ int main(int)
   named_matrix data_subset;
   data_subset.push_back(data[i]);
   i++;
+  struct timeval start, end;
+  gettimeofday(&start, NULL);
   emm.build(data_subset);
   data_subset.clear();
 
-  struct timeval start, end;
-  gettimeofday(&start, NULL);
   double avg=0, num_epochs=0;
-  for(; i<data.size(); i++)
+  for(; i<301/*data.size()*/; i++)
   {
     //std::cout << i << " " << data[i][0].first << " " << data[i][1].first << std::endl;
     std::string pred_state = emm.predict();
-        if(i%432 == 0)
+        if(i%300 == 0)
         {
            num_epochs++;
            gettimeofday(&end, NULL);
-           avg = (avg*num_epochs + (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec))/(num_epochs+1);
-           std::cout << i << " " << (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec) << " " << avg << " " << emm.nclusters() << " " << emm.nstates() << std::endl;
+           //avg = (avg*num_epochs + (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec))/(num_epochs+1);
+           std::cout << i << " " << (end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec - start.tv_usec) << " " << emm.nclusters() << " " << emm.ntransitions() << " " << pred_state << std::endl;
            gettimeofday(&start, NULL);
         }
     data_subset.push_back(data[i]);
@@ -97,7 +97,10 @@ int main(int)
     std::cout << "cluster_counts " << emm.cluster_counts() << std::endl;
     std::cout << "last_clustering " << emm.last_clustering() << std::endl;
     std::cout << "cluster_centers " << emm.cluster_centers() << std::endl;
-    std::cout << "nclusters " << emm.nclusters() << std::endl;*/
+    std::cout << "nclusters " << emm.nclusters() << std::endl;
+    std::cout << "    TRACDS      " << std::endl;
+    std::cout << "ntransitions " << emm.ntransitions() << std::endl;*/
+    
     data_subset.clear();
   }
   //emm.build(train_table);

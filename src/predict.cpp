@@ -65,6 +65,7 @@ std::string EMM::predict(std::string current_state, int n)
 
    //std::cout << "Predicted state " << prob_max(prob) << std::endl;
    sel = states[prob_max(prob)];
+   //std::cout << "Predicted state " << sel << std::endl;
    
    return sel;
 }

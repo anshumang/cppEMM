@@ -94,6 +94,7 @@ named_matrix SimpleMC::smc_countMatrix()
    int r=0, c=0;
    nm.resize(used.size());
    auto ic = m_initial_counts.begin();
+   int num_nonzero = 0, num_abovethreshold = 0;
    for(auto rr: m_counts)
    {
       nm[r].resize(used.size());
@@ -105,9 +106,18 @@ named_matrix SimpleMC::smc_countMatrix()
            nm[r][c] = std::pair<double, std::string>(rr[c], ic[u[c].first].second); 
            c++;
          }
+         if(cc > 0)
+         {
+             num_nonzero++;
+             if(cc > 0.1)
+             {
+                num_abovethreshold++;
+             } 
+         }
       }
       r++;
       c=0;
    }
+   //std::cout << "smc_countMatrix " << num_nonzero << " " << num_abovethreshold << std::endl;
    return nm;
 }

@@ -219,6 +219,7 @@ public:
  std::string cluster_counts();
  std::string cluster_centers();
  std::string last_clustering();
+ std::string ntransitions();
 };
 
 #endif

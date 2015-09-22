@@ -283,3 +283,26 @@ int SimpleMC::add_state(std::string name)
 
          return pos-1;
 }
+
+std::string EMM::ntransitions()
+{
+    std::string ret("");
+    SimpleMC* mm = m_TRACDS->m_mm;
+    matrix cmm = mm->m_counts; //mm->smc_countMatrix();
+    int num_nonzero = 0, num_abovethreshold = 0;
+    for(auto r : cmm)
+    {
+       for(auto c : r)
+       {
+          if(c > 0)
+          {
+             num_nonzero++;
+             if(c > m_threshold)
+             {
+                num_abovethreshold++;
+             }
+          }
+       }
+    }
+    return ret+std::to_string(num_nonzero)+" "+std::to_string(num_abovethreshold);
+}
