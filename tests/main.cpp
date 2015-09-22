@@ -80,7 +80,7 @@ int main(int)
   double avg=0, num_epochs=0;
   for(; i<data.size(); i++)
   {
-    std::cout << i << " " << data[i][0].first << " " << data[i][1].first << std::endl;
+    //std::cout << i << " " << data[i][0].first << " " << data[i][1].first << std::endl;
     std::string pred_state = emm.predict();
         if(i%432 == 0)
         {
@@ -92,12 +92,12 @@ int main(int)
         }
     data_subset.push_back(data[i]);
     emm.build(data_subset);
-    std::cout << "    tNN      " << std::endl;
+    /*std::cout << "    tNN      " << std::endl;
     std::cout << "clusters " << emm.clusters() << std::endl;
     std::cout << "cluster_counts " << emm.cluster_counts() << std::endl;
     std::cout << "last_clustering " << emm.last_clustering() << std::endl;
     std::cout << "cluster_centers " << emm.cluster_centers() << std::endl;
-    std::cout << "nclusters " << emm.nclusters() << std::endl;
+    std::cout << "nclusters " << emm.nclusters() << std::endl;*/
     data_subset.clear();
   }
   //emm.build(train_table);

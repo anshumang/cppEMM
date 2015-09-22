@@ -90,6 +90,7 @@ void EMM::cluster(named_matrix newdata)
          /*supports euclidean only*/
            named_vector inside(m_tNN->m_centers.size());
            int idxdim=0, idxnumc=0;
+	   //std::cout << "Centres with distances less than threshold";
 	   for(auto w : m_tNN->m_centers)
 	   {
 		   double dist = 0;
@@ -99,11 +100,17 @@ void EMM::cluster(named_matrix newdata)
                            //std::cout << "v.first " << v.first << " w[" << idxdim << "].first " << w[idxdim].first << " dist " << dist << std::endl; 
 			   idxdim++;
 		   }
-		   inside[idxnumc] = std::pair<double, std::string>(std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first, w[0].second);
+		   idxdim=0;
+                   double temp = std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first;
+                   /*if(temp < 0)
+                   {
+                       std::cout << " " << w[0].first <<  "," << w[1].first << "=>" << temp << " " << nd[0].first << " " << nd[1].first << " " << m_tNN->m_var_thresholds[idxnumc].first;
+                   }*/
+		   inside[idxnumc] = std::pair<double, std::string>(/*std::sqrt(dist) - m_tNN->m_var_thresholds[idxnumc].first*/temp, w[0].second);
                    //std::cout << "inside " << idxnumc << " first " << inside[idxnumc].first << " threshold " << m_tNN->m_var_thresholds[idxnumc].first << std::endl;
 		   idxnumc++;
-		   idxdim=0;
 	   }
+	   //std::cout << std::endl;
            std::vector<std::string> matches;
            for(auto r : inside)
            {
@@ -135,6 +142,7 @@ void EMM::cluster(named_matrix newdata)
                            if(r.first < min_dist)
                            {
                                sel = r.second; 
+                               min_dist = r.first;
                            }
                        }
                }
